@@ -8,9 +8,10 @@ class SimulatedAnnealing(LocalSearchBase):
     def run(
         self,
         initial_state: List[Tuple[int, int]],
-        initial_temperature: float = 1000.0,
+        initial_temperature: float = 5000.0,
         cooling_rate: float = 0.99,
         min_temperature: float = 0.1,
+        iterations_per_temp: int = 20,
         **kwargs: Any
     ) -> Tuple[List[Tuple[int, int]], float, List[float], List[List[Tuple[int, int]]]]:
         current_state = list(initial_state)
@@ -21,16 +22,17 @@ class SimulatedAnnealing(LocalSearchBase):
         states_history = [current_state]
         temperature = initial_temperature
         while temperature > min_temperature:
-            neighbor = self.get_neighbor(current_state)
-            neighbor_cost = self.evaluate(neighbor)
-            delta_e = neighbor_cost - current_cost
-            if delta_e < 0 or random.random() < math.exp(-delta_e / temperature):
-                current_state = neighbor
-                current_cost = neighbor_cost
-                if current_cost < best_cost:
-                    best_cost = current_cost
-                    best_state = list(current_state)
+            for _ in range(iterations_per_temp):
+                neighbor = self.get_neighbor(current_state)
+                neighbor_cost = self.evaluate(neighbor)
+                delta_e = neighbor_cost - current_cost
+                if delta_e < 0 or random.random() < math.exp(-delta_e / temperature):
+                    current_state = neighbor
+                    current_cost = neighbor_cost
+                    if current_cost < best_cost:
+                        best_cost = current_cost
+                        best_state = list(current_state)
             evaluations.append(current_cost)
             states_history.append(current_state)
             temperature *= cooling_rate
-            return best_state, best_cost, evaluations, states_history
+        return best_state, best_cost, evaluations, states_history
