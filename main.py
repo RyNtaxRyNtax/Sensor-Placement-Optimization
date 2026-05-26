@@ -68,10 +68,7 @@ if __name__ == "__main__":
     world = GridWorld("map1")
 
     # TODO: Add your bonus algorithm classes to this list (e.g., GeneticAlgorithm, BeamSearch, TabuSearch)
-    algorithm_classes = [
-        HillClimbing,
-        # SimulatedAnnealing
-    ]
+    algorithm_classes = [HillClimbing, SimulatedAnnealing]
 
     # TODO: Initialize and assign the starting state for the experiments.
     # Note: For a fair comparison, all algorithms must start from the exact same initial configuration.
